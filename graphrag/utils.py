@@ -12,7 +12,7 @@ import logging
 import re
 import time
 from collections import defaultdict
-from hashlib import md5
+import hashlib
 from typing import Any, Callable
 import os
 import trio
@@ -93,7 +93,7 @@ def dict_has_keys_with_types(
 
 
 def get_llm_cache(llmnm, txt, history, genconf):
-    hasher = xxhash.xxh64()
+    hasher = hashlib.sha256()
     hasher.update(str(llmnm).encode("utf-8"))
     hasher.update(str(txt).encode("utf-8"))
     hasher.update(str(history).encode("utf-8"))
@@ -107,7 +107,7 @@ def get_llm_cache(llmnm, txt, history, genconf):
 
 
 def set_llm_cache(llmnm, txt, v, history, genconf):
-    hasher = xxhash.xxh64()
+    hasher = hashlib.sha256()
     hasher.update(str(llmnm).encode("utf-8"))
     hasher.update(str(txt).encode("utf-8"))
     hasher.update(str(history).encode("utf-8"))
@@ -118,7 +118,7 @@ def set_llm_cache(llmnm, txt, v, history, genconf):
 
 
 def get_embed_cache(llmnm, txt):
-    hasher = xxhash.xxh64()
+    hasher = hashlib.sha256()
     hasher.update(str(llmnm).encode("utf-8"))
     hasher.update(str(txt).encode("utf-8"))
 
@@ -130,7 +130,7 @@ def get_embed_cache(llmnm, txt):
 
 
 def set_embed_cache(llmnm, txt, arr):
-    hasher = xxhash.xxh64()
+    hasher = hashlib.sha256()
     hasher.update(str(llmnm).encode("utf-8"))
     hasher.update(str(txt).encode("utf-8"))
 
@@ -140,7 +140,7 @@ def set_embed_cache(llmnm, txt, arr):
 
 
 def get_tags_from_cache(kb_ids):
-    hasher = xxhash.xxh64()
+    hasher = hashlib.sha256()
     hasher.update(str(kb_ids).encode("utf-8"))
 
     k = hasher.hexdigest()
@@ -151,7 +151,7 @@ def get_tags_from_cache(kb_ids):
 
 
 def set_tags_to_cache(kb_ids, tags):
-    hasher = xxhash.xxh64()
+    hasher = hashlib.sha256()
     hasher.update(str(kb_ids).encode("utf-8"))
 
     k = hasher.hexdigest()
@@ -227,7 +227,7 @@ def graph_merge(g1: nx.Graph, g2: nx.Graph, change: GraphChange):
     return g1
 
 def compute_args_hash(*args):
-    return md5(str(args).encode()).hexdigest()
+    return hashlib.sha256(str(args).encode()).hexdigest()
 
 
 def handle_single_entity_extraction(
@@ -296,7 +296,7 @@ def is_float_regex(value):
 
 
 def chunk_id(chunk):
-    return xxhash.xxh64((chunk["content_with_weight"] + chunk["kb_id"]).encode("utf-8")).hexdigest()
+    return hashlib.sha256((chunk["content_with_weight"] + chunk["kb_id"]).encode("utf-8")).hexdigest()
 
 
 async def graph_node_to_chunk(kb_id, embd_mdl, ent_name, meta, chunks):
