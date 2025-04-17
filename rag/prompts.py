@@ -196,7 +196,7 @@ Requirements:
 """
     msg = [{"role": "system", "content": prompt}, {"role": "user", "content": "Output: "}]
     _, msg = message_fit_in(msg, chat_mdl.max_length)
-    kwd = chat_mdl.chat(prompt, msg[1:], {"temperature": 0.2})
+    kwd = chat_mdl.chat(prompt, msg[1:], {"temperature": 0.2, "presence_penalty": 0.4})
     if isinstance(kwd, tuple):
         kwd = kwd[0]
     kwd = re.sub(r"^.*</think>", "", kwd, flags=re.DOTALL)
@@ -223,7 +223,7 @@ Requirements:
 """
     msg = [{"role": "system", "content": prompt}, {"role": "user", "content": "Output: "}]
     _, msg = message_fit_in(msg, chat_mdl.max_length)
-    kwd = chat_mdl.chat(prompt, msg[1:], {"temperature": 0.2})
+    kwd = chat_mdl.chat(prompt, msg[1:], {"temperature": 0.2, "presence_penalty": 0.4})
     if isinstance(kwd, tuple):
         kwd = kwd[0]
     kwd = re.sub(r"^.*</think>", "", kwd, flags=re.DOTALL)
@@ -305,7 +305,7 @@ Output: What's the weather in Rochester on {tomorrow}?
 {conv}
 ###############
     """
-    ans = chat_mdl.chat(prompt, [{"role": "user", "content": "Output: "}], {"temperature": 0.2})
+    ans = chat_mdl.chat(prompt, [{"role": "user", "content": "Output: "}], {"temperature": 0.2, "presence_penalty": 0.4})
     ans = re.sub(r"^.*</think>", "", ans, flags=re.DOTALL)
     return ans if ans.find("**ERROR**") < 0 else messages[-1]["content"]
 
@@ -404,7 +404,7 @@ Output:
 """
     msg = [{"role": "system", "content": prompt}, {"role": "user", "content": "Output: "}]
     _, msg = message_fit_in(msg, chat_mdl.max_length)
-    kwd = chat_mdl.chat(prompt, msg[1:], {"temperature": 0.5})
+    kwd = chat_mdl.chat(prompt, msg[1:], {"temperature": 0.5, "presence_penalty": 0.4})
     if isinstance(kwd, tuple):
         kwd = kwd[0]
     kwd = re.sub(r"^.*</think>", "", kwd, flags=re.DOTALL)

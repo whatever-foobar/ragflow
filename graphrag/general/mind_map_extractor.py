@@ -171,7 +171,7 @@ class MindMapExtractor(Extractor):
             self._input_text_key: text,
         }
         text = perform_variable_replacements(self._mind_map_prompt, variables=variables)
-        gen_conf = {"temperature": 0.5}
+        gen_conf = {"temperature": 0.5, "presence_penalty": 0.4}
         async with chat_limiter:
             response = await trio.to_thread.run_sync(lambda: self._chat(text, [{"role": "user", "content": "Output:"}], gen_conf))
         response = re.sub(r"```[^\n]*", "", response)
