@@ -105,7 +105,7 @@ class GraphExtractor(Extractor):
             **self._prompt_variables,
             self._input_text_key: content,
         }
-        gen_conf = {"temperature": 0.3}
+        gen_conf = {"temperature": 0.6, "presence_penalty": 0.5}
         hint_prompt = perform_variable_replacements(self._extraction_prompt, variables=variables)
         async with chat_limiter:
             response = await trio.to_thread.run_sync(lambda: self._chat(hint_prompt, [{"role": "user", "content": "Output:"}], gen_conf))
