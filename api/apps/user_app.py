@@ -100,7 +100,7 @@ def login():
     user = UserService.query_user(email, password)
     if user:
         response_data = user.to_json()
-        user.access_token = get_uuid()
+        # user.access_token = get_uuid()
         login_user(user)
         user.update_time = (current_timestamp(),)
         user.update_date = (datetime_format(datetime.now()),)
@@ -351,7 +351,7 @@ def log_out():
         schema:
           type: object
     """
-    current_user.access_token = ""
+    # current_user.access_token = ""
     current_user.save()
     logout_user()
     return get_json_result(data=True)
@@ -401,6 +401,8 @@ def setting_user():
             )
 
         if new_password:
+            current_user.access_token = get_uuid() # patch
+            current_user.save() # patch
             update_dict["password"] = generate_password_hash(decrypt(new_password))
 
     for k in request_data.keys():
@@ -563,7 +565,7 @@ def user_add():
           type: object
     """
 
-    if not settings.REGISTER_ENABLED:
+    if True:
         return get_json_result(
             data=False,
             message="User registration is disabled!",
