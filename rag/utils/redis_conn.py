@@ -353,7 +353,7 @@ class RedisDistributedLock:
     async def spin_acquire(self):
         REDIS_CONN.delete_if_equal(self.lock_key, self.lock_value)
         while True:
-            if self.lock.acquire(token=self.lock_value):
+            if self.lock.acquire(token=self.lock_value, blocking=False):
                 break
             await trio.sleep(10)
 
