@@ -736,6 +736,7 @@ async def main():
     signal.signal(signal.SIGTERM, signal_handler)
 
     async with trio.open_nursery() as nursery:
+        trio.to_thread.current_default_thread_limiter().total_tokens = 128
         nursery.start_soon(report_status)
         while not stop_event.is_set():
             await task_limiter.acquire()
