@@ -103,6 +103,7 @@ class CommunityReportsExtractor(Extractor):
             response = re.sub(r"[^\}]*$", "", response)
             response = re.sub(r"\{\{", "{", response)
             response = re.sub(r"\}\}", "}", response)
+            response = re.sub(r"\"title:", "\"title\":", response) # common issue with some llms
             logging.debug(response)
             try:
                 response = json.loads(response)
