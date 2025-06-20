@@ -18,7 +18,7 @@ import logging
 import re
 import time
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timezone
 from functools import partial
 from timeit import default_timer as timer
 
@@ -240,6 +240,8 @@ def chat(dialog, messages, stream=True, **kwargs):
     for p in prompt_config["parameters"]:
         if p["key"] == "knowledge":
             continue
+        if p["key"] == "iso_time":
+            continue
         if p["key"] not in kwargs and not p["optional"]:
             raise KeyError("Miss parameter: " + p["key"])
         if p["key"] not in kwargs:
@@ -317,6 +319,7 @@ def chat(dialog, messages, stream=True, **kwargs):
         return {"answer": prompt_config["empty_response"], "reference": kbinfos}
 
     kwargs["knowledge"] = "\n------\n" + "\n\n------\n\n".join(knowledges)
+    kwargs["iso_time"] = str(datetime.now(timezone.utc).astimezone().isoformat())
     gen_conf = dialog.llm_setting
 
     msg = [{"role": "system", "content": prompt_config["system"].format(**kwargs)}]
